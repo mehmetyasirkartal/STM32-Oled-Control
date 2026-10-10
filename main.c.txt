@@ -1,0 +1,50 @@
+/* USER CODE BEGIN 2 */
+  // Başlangıç ayarları
+  ssd1306_Init();                               // OLED ekranı başlat
+  BSP_LED_Init(LED_GREEN);                    
+  /* USER CODE END 2 */
+
+  /* sonsuz döngü */
+  /* USER CODE BEGIN WHILE */
+  while (1)
+  {
+      //  Potansiyometreyi oku (0 ile 4095 arası değer veriyor)
+      HAL_ADC_Start(&hadc1);
+      HAL_ADC_PollForConversion(&hadc1, 10);
+      uint32_t okunan_deger = HAL_ADC_GetValue(&hadc1); 
+
+      //  Okunan değeri oranla
+      int yuzde = (okunan_deger * 100) / 4095;             // Ekrana yazdırmak için yüzde hesabı
+      
+      //  OLED ekrana çizim yapma kısmı
+      ssd1306_Fill(Black); // Ekranı temizle
+      
+      // Üstteki başlık
+      ssd1306_SetCursor(10, 5);
+      ssd1306_WriteString("POWER", Font_7x10, White);
+
+      // Bar grafiğinin dış çerçevesi
+      ssd1306_Line(10, 25, 110, 25, White);  // Üst
+      ssd1306_Line(10, 40, 110, 40, White);  // Alt
+      ssd1306_Line(10, 25, 10, 40, White);   // Sol
+      ssd1306_Line(110, 25, 110, 40, White); // Sağ
+
+      // Barın içini yüzdeye göre doldurma
+      int bar_genisligi = (yuzde * 96) / 100;
+      for(int i = 0; i < bar_genisligi; i++) {
+          ssd1306_Line(12 + i, 27, 12 + i, 38, White);
+      }
+
+      // Yüzdeyi sayı olarak alta yaz
+      char yaziKutusu[20];
+      sprintf(yaziKutusu, "%% %d", yuzde);
+      ssd1306_SetCursor(45, 45);
+      ssd1306_WriteString(yaziKutusu, Font_7x10, White);
+
+      // Çizimleri ekrana bas
+      ssd1306_UpdateScreen();
+
+      // Sistemin kilitlenmemesi için kısa bir mola
+      HAL_Delay(50);
+      
+  /* USER CODE END WHILE */
