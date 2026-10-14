@@ -1,0 +1,20 @@
+#include "main.h"
+void SystemClock_Config(void);
+static void MX_GPIO_Init(void);
+
+int main(void) {
+  HAL_Init(); SystemClock_Config(); MX_GPIO_Init();
+  int sayac = 0;
+  uint8_t onceki_durum = 0;
+  
+  while (1) {
+    uint8_t simdiki_durum = HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_0);
+    
+    // Butona basıldığı anı (Yükselen Kenar) yakala
+    if(simdiki_durum == 1 && onceki_durum == 0) { 
+        sayac++;
+    }
+    onceki_durum = simdiki_durum;
+    HAL_Delay(50);
+  }
+}

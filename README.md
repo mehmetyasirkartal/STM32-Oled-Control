@@ -1,15 +1,16 @@
-# STM32 Potansiyometre ve OLED Ekran Uygulaması
+STM32 Gömülü Sistem Çalışmaları Arşivi 🚀
 
-Bu projede, STM32 Nucleo kartı kullanılarak potansiyometreden okunan analog değer, 0.96 inç OLED ekranda bar grafiği ve yüzde olarak gösterilmektedir. Proje yazılımı STM32CubeIDE ortamında C dili ile geliştirilmiştir.
+Bu depo, STM32 mikrodenetleyicileri ve STM32 HAL kütüphanesi kullanarak geliştirdiğim temel ve orta seviye gömülü sistem uygulamalarını içermektedir. 
 
-## Kullanılan Malzemeler
-* STM32 Nucleo-C031C6
-* 0.96" I2C OLED Ekran 
-* 10K Potansiyometre
+Projeler, STM32CubeIDE ortamında C dili ile yazılmış olup temel çevre birimi kullanımlarını anlamak ve donanım kontrolü pratiği yapmak amacıyla numaralandırılmış bir arşiv şeklinde düzenlenmiştir.
 
-## Pin Bağlantıları
-* **OLED Ekran:** `PA9` (SCL) ve `PA10` (SDA)
-* **Potansiyometre:** `PA0` (ADC1_IN0)
+ 📂 Çalışma Konuları
+Bu arşivde yer alan klasörler aşağıdaki temel gömülü sistem konularını kapsar:
+* **GPIO (Genel Amaçlı Giriş/Çıkış):** LED sürme, buton okuma, yazılımsal debounce ve zaman gecikmeli algoritmalar (Trafik lambası, karaşimşek vb.).
+* **EXTI (Harici Kesmeler):** Donanımsal kesmeler kullanılarak ana döngüden (while) bağımsız, hızlı tepki veren buton ve sensör okumaları.
+* **ADC (Analog-Dijital Çevirici):** Sensörlerden ve potansiyometrelerden gelen analog verilerin 12-bit dijital verilere dönüştürülmesi.
+* **I2C Haberleşmesi:** Sensör verilerinin OLED ekran gibi modüllerde anlık ve grafiksel (bar grafiği vb.) olarak gösterilmesi.
 
-## Projenin Çalışma Mantığı
-Sistemde, potansiyometreden elde edilen 0-4095 arasındaki 12-bit ADC (analog) değerleri okunur. Ardından bu değerler 0 ile 100 arasında bir yüzdeye matematiksel olarak oranlanır. Hesaplanan sonuç, I2C haberleşme protokolü kullanılarak OLED ekrana anlık olarak hem sayısal veri (yüzde) hem de dinamik bir bar grafiği şeklinde aktarılır.
+ 🛠️ Kullanılan Araçlar
+* **Geliştirme Kartı: STM32 Nucleo seriş (C031C6)
+* **Geliştirme Ortamı: STM32CubeIDE 
