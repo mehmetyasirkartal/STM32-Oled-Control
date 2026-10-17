@@ -1,0 +1,30 @@
+#include "main.h"
+extern TIM_HandleTypeDef htim1;
+extern ADC_HandleTypeDef hadc1;
+
+long map(long x, long in_min, long in_max, long out_min, long out_max) {
+    return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+}
+
+int main(void) {
+  HAL_Init(); 
+  HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1); // Timer üzerinden PWM sinyalini başlat
+  
+  uint32_t adc_val = 0;
+  uint16_t servo_pwm = 0;
+  
+  while (1) {
+    HAL_ADC_Start(&hadc1);
+    if(HAL_ADC_PollForConversion(&hadc1, 100) == HAL_OK) {
+        adc_val = HAL_ADC_GetValue(&hadc1);
+        
+        // ADC değerini Servo motorun gerektirdiği PWM sinyal aralığına oranlama
+        servo_pwm = map(adc_val, 0, 4095, 500, 2500); 
+        
+        // Hesaplanan PWM değerini Compare Register'a yazarak motoru hareket ettir
+        __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, servo_pwm);
+    }
+    HAL_ADC_Stop(&hadc1);
+    HAL_Delay(50);
+  }
+}

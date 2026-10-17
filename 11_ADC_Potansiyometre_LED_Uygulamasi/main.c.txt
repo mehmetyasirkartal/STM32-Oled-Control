@@ -1,0 +1,23 @@
+#include "main.h"
+extern ADC_HandleTypeDef hadc1;
+
+int main(void) {
+  HAL_Init(); 
+  uint32_t adc_degeri = 0;
+  
+  while (1) {
+    HAL_ADC_Start(&hadc1);
+    if(HAL_ADC_PollForConversion(&hadc1, 100) == HAL_OK) {
+        adc_degeri = HAL_ADC_GetValue(&hadc1);
+        
+        // Potansiyometre yarıyı (2048) geçince LED yansın
+        if(adc_degeri > 2048) {
+            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_SET);
+        } else {
+            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_RESET);
+        }
+    }
+    HAL_ADC_Stop(&hadc1);
+    HAL_Delay(50);
+  }
+}

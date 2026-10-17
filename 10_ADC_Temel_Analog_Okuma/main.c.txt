@@ -1,0 +1,19 @@
+#include "main.h"
+extern ADC_HandleTypeDef hadc1;
+
+int main(void) {
+  HAL_Init(); // Sistem ve çevre birimleri başlatıldı
+  uint32_t adc_degeri = 0;
+  
+  while (1) {
+    HAL_ADC_Start(&hadc1); // ADC çevrimini başlat
+    
+    // Çevrimin bitmesini bekle ve değeri oku
+    if(HAL_ADC_PollForConversion(&hadc1, 100) == HAL_OK) {
+        adc_degeri = HAL_ADC_GetValue(&hadc1);
+    }
+    
+    HAL_ADC_Stop(&hadc1);
+    HAL_Delay(100);
+  }
+}
